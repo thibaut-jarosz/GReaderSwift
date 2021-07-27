@@ -1,9 +1,9 @@
 import Foundation
 
 public struct Credentials: Codable, Equatable {
-    let baseURL: URL
-    let username: String
-    let authKey: String
+    public var baseURL: URL
+    public var username: String
+    public var authKey: String
 }
 
 extension Credentials {
