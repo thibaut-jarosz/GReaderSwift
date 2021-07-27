@@ -1,6 +1,7 @@
 import Foundation
 
 public struct Credentials: Codable, Equatable {
+    let baseURL: URL
     let username: String
     let authKey: String
 }
@@ -34,6 +35,7 @@ extension Credentials {
             throw GReaderError.invalidDataResponse
         }
         self.init(
+            baseURL: baseURL,
             username: username,
             authKey: auth
         )

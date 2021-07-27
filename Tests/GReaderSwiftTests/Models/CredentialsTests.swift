@@ -32,6 +32,7 @@ final class CredentialsTests: XCTestCase {
         let result = try await Credentials(on: baseURL, username: "username", password: "password")
         
         // Then
+        expect(result.baseURL.absoluteString) == "https://localhost/api/"
         expect(result.username) == "username"
         expect(result.authKey) == "def, xyz"
     }
