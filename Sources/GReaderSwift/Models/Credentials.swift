@@ -29,7 +29,7 @@ extension Credentials {
             throw GReaderError.serverResponseError(statusCode)
         }
         
-        // Parse response
+        // Parse response: auth key is stored in the line that starts with "Auth="
         let auth = String(data: data, encoding: .utf8)?.parsedLoginResponse["Auth"] ?? ""
         if auth.isEmpty {
             throw GReaderError.invalidDataResponse
@@ -43,13 +43,17 @@ extension Credentials {
 }
 
 private extension String {
+    /// Transform a string of "key=value" lines into dict
     var parsedLoginResponse: [String:String] {
+        // Get lines
         components(separatedBy: .newlines)
             .map { line in
+                // Get array of key and value (max 2 items per array)
                 line.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
                     .map(String.init)
             }
             .reduce([String:String]()) { dict, array in
+                // store result in dict if there is both a key and a value
                 var dict = dict
                 if array.count == 2 {
                     dict[array[0]] = array[1]
