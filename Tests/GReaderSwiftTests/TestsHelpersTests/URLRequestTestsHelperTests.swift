@@ -1,7 +1,7 @@
 import XCTest
 import Nimble
 
-final class URLRequestTests: XCTestCase {
+final class URLRequestTestsHelperTests: XCTestCase {
     func test_HTTPBodyStreamString_ShouldReturnString_WhenHTTPBodyStreamContainsDataConvertedFromString() {
         // Given
         let data = "Some string".data(using: .utf8)!

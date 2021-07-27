@@ -1,7 +1,7 @@
 import XCTest
 import Nimble
 
-final class StringTests: XCTestCase {
+final class StringTestsHelpersTests: XCTestCase {
     func test_URLQueryItems_ShouldReturnQueryItems_WhenStringIsCorrectlyFormatted() {
         // Given
         let string = "a=b&c=d"
