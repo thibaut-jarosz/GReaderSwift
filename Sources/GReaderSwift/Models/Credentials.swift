@@ -40,21 +40,6 @@ extension Credentials {
             authKey: auth
         )
     }
-    
-    private func parseResponse(_ response: String) -> [String:String] {
-        response.components(separatedBy: .newlines)
-            .map { line in
-                line.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
-                    .map(String.init)
-            }
-            .reduce([String:String]()) { dict, array in
-                var dict = dict
-                if array.count == 2 {
-                    dict[array[0]] = array[1]
-                }
-                return dict
-            }
-    }
 }
 
 private extension String {
