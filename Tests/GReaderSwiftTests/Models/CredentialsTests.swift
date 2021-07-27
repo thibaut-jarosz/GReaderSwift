@@ -33,7 +33,7 @@ final class CredentialsTests: XCTestCase {
         
         // Then
         expect(result.username) == "username"
-        expect(result.authToken) == "def, xyz"
+        expect(result.authKey) == "def, xyz"
     }
     
     func test_Init_ShouldSendValidDataInRequest() async throws {

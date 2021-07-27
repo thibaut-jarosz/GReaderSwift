@@ -2,7 +2,7 @@ import Foundation
 
 public struct Credentials: Codable, Equatable {
     let username: String
-    let authToken: String
+    let authKey: String
 }
 
 extension Credentials {
@@ -35,7 +35,7 @@ extension Credentials {
         }
         self.init(
             username: username,
-            authToken: auth
+            authKey: auth
         )
     }
     
