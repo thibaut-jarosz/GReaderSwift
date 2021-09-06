@@ -32,7 +32,7 @@ extension Credentials {
         // Parse response: auth key is stored in the line that starts with "Auth="
         let auth = String(data: data, encoding: .utf8)?.parsedLoginResponse["Auth"] ?? ""
         if auth.isEmpty {
-            throw GReaderError.invalidDataResponse
+            throw GReaderError.invalidDataResponse(data)
         }
         self.init(
             baseURL: baseURL,
