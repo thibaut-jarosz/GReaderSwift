@@ -1,12 +1,21 @@
 import Foundation
 
+/// Contains all that is necessary to connect to GReader server.
 public struct Credentials: Codable, Equatable {
+    /// Base URL of the server.
     public var baseURL: URL
+    /// Username (or email) of the user.
     public var username: String
+    /// Authentication key associated to the username on the server.
     public var authKey: String
 }
 
 extension Credentials {
+    /// Create credentials after retrieving the authentication key using given base URL, username and password.
+    /// - Parameters:
+    ///   - baseURL: The base URL of the server.
+    ///   - username: The username (or email) used to authenticate on the server.
+    ///   - password: The password (or API password) of the username.
     public init(on baseURL: URL, username: String, password: String) async throws {
         // Prepare form-urlencoded POST data
         var urlComponents = URLComponents()
