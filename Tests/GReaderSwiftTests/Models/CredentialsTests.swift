@@ -84,10 +84,10 @@ final class CredentialsTests: XCTestCase {
     
     func test_Init_ShouldThrowAnInvalidDataResponseError_AuthIsMissing() async throws {
         // Given
-        let mockedResponse = "Authentication=abc"
+        let mockedResponse = "Authentication=abc".data(using: .utf8)!
         
         // When
-        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        let mock = mock(response: mockedResponse)
         mock.register()
         
         do {
@@ -100,16 +100,16 @@ final class CredentialsTests: XCTestCase {
         }
         catch {
             // Then
-            expect(error as? GReaderError) == .invalidDataResponse
+            expect(error as? GReaderError) == .invalidDataResponse(mockedResponse)
         }
     }
     
     func test_Init_ShouldThrowAnInvalidDataResponseError_AuthIsEmpty() async throws {
         // Given
-        let mockedResponse = "Auth="
+        let mockedResponse = "Auth=".data(using: .utf8)!
         
         // When
-        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        let mock = mock(response: mockedResponse)
         mock.register()
         
         do {
@@ -122,7 +122,7 @@ final class CredentialsTests: XCTestCase {
         }
         catch {
             // Then
-            expect(error as? GReaderError) == .invalidDataResponse
+            expect(error as? GReaderError) == .invalidDataResponse(mockedResponse)
         }
     }
     
