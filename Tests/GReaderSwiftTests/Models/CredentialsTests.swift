@@ -82,7 +82,7 @@ final class CredentialsTests: XCTestCase {
         }
     }
     
-    func test_Init_ShouldThrowAnInvalidDataResponseError_AuthIsMissing() async throws {
+    func test_Init_ShouldThrowAnInvalidDataResponseError_WhenAuthIsMissing() async throws {
         // Given
         let mockedResponse = "Authentication=abc".data(using: .utf8)!
         
@@ -104,7 +104,7 @@ final class CredentialsTests: XCTestCase {
         }
     }
     
-    func test_Init_ShouldThrowAnInvalidDataResponseError_AuthIsEmpty() async throws {
+    func test_Init_ShouldThrowAnInvalidDataResponseError_WhenAuthIsEmpty() async throws {
         // Given
         let mockedResponse = "Auth=".data(using: .utf8)!
         
