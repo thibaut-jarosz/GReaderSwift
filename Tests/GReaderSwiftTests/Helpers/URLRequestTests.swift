@@ -5,7 +5,7 @@ import Nimble
 
 final class URLRequestTests: XCTestCase {
     
-    func test_InitWithCredentials_ShouldSetAuthenticationHeader() {
+    func test_InitWithCredentials_ShouldSetAuthorizationHeader() {
         // Given
         let credentials = Credentials(
             baseURL: URL(string: "https://localhost/")!,
@@ -17,7 +17,7 @@ final class URLRequestTests: XCTestCase {
         let result = URLRequest(url: URL(string: "https://localhost/path")!, credentials: credentials)
         
         // Then
-        expect(result.allHTTPHeaderFields?["Authorization"]) == "GoogleLogin auth=abc"
+        expect(result).to(beAuthorized(withAuthKey: "abc"))
     }
     
 }
