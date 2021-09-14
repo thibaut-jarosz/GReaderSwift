@@ -7,63 +7,68 @@ final class URLAppendingTests: XCTestCase {
     func test_Appending_ShouldAddPathAndQueryItemsToURL() {
         // Given
         let url = URL(string: "https://localhost/")!
+        let path = URLPath.clientLogin
         
         // When
-        let result = url.appending(path: "some/path", queryItems: [
+        let result = url.appending(path: path, queryItems: [
             URLQueryItem(name: "abc", value: "def"),
             URLQueryItem(name: "123", value: "456")
         ])
         
         // Then
-        expect(result) == URL(string: "https://localhost/some/path?abc=def&123=456")!
+        expect(result) == URL(string: "https://localhost/\(URLPath.clientLogin.rawValue)?abc=def&123=456")!
     }
     
     func test_Appending_ShouldAppendQueryItemsToExistingOnes() {
         // Given
         let url = URL(string: "https://localhost/?abc=def")!
+        let path = URLPath.token
         
         // When
-        let result = url.appending(path: "some/path", queryItems: [
+        let result = url.appending(path: path, queryItems: [
             URLQueryItem(name: "123", value: "456")
         ])
         
         // Then
-        expect(result) == URL(string: "https://localhost/some/path?abc=def&123=456")!
+        expect(result) == URL(string: "https://localhost/\(URLPath.token.rawValue)?abc=def&123=456")!
     }
     
     func test_Appending_ShouldKeepFragment() {
         // Given
         let url = URL(string: "https://localhost/?abc=def#test")!
+        let path = URLPath.clientLogin
         
         // When
-        let result = url.appending(path: "some/path", queryItems: [
+        let result = url.appending(path: path, queryItems: [
             URLQueryItem(name: "123", value: "456")
         ])
         
         // Then
-        expect(result) == URL(string: "https://localhost/some/path?abc=def&123=456#test")!
+        expect(result) == URL(string: "https://localhost/\(URLPath.clientLogin.rawValue)?abc=def&123=456#test")!
     }
     
     func test_Appending_ShouldStillAppendPath_WhenQueryItemsIsEmpty() {
         // Given
         let url = URL(string: "https://localhost/?abc=def")!
+        let path = URLPath.clientLogin
         
         // When
-        let result = url.appending(path: "some/path", queryItems: [])
+        let result = url.appending(path: path, queryItems: [])
         
         // Then
-        expect(result) == URL(string: "https://localhost/some/path?abc=def")!
+        expect(result) == URL(string: "https://localhost/\(URLPath.clientLogin.rawValue)?abc=def")!
     }
     
     func test_Appending_ShouldStillAppendPath_WhenQueryItemsIsNil() {
         // Given
         let url = URL(string: "https://localhost/?abc=def")!
+        let path = URLPath.clientLogin
         
         // When
-        let result = url.appending(path: "some/path")
+        let result = url.appending(path: path)
         
         // Then
-        expect(result) == URL(string: "https://localhost/some/path?abc=def")!
+        expect(result) == URL(string: "https://localhost/\(URLPath.clientLogin.rawValue)?abc=def")!
     }
     
     func test_Appending_ShouldStillAppendQueryItem_WhenPathIsNil() {

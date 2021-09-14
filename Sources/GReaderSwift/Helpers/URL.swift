@@ -7,11 +7,11 @@ extension URL {
     /// - Parameters:
     ///   - path: The path to append.
     ///   - queryItems: The query items to append.
-    func appending(path: String? = nil, queryItems: [URLQueryItem]? = nil) -> URL {
+    func appending(path: URLPath? = nil, queryItems: [URLQueryItem]? = nil) -> URL {
         var url = self
         
         if let path = path {
-            url.appendPathComponent(path)
+            url.appendPathComponent(path.rawValue)
         }
         
         if let queryItems = queryItems, queryItems.count > 0 {

@@ -14,10 +14,7 @@ extension AccessToken {
     /// - Parameter credentials: Credentials used to retrieve the value of the access token.
     public init(credentials: Credentials) async throws {
         // Create request
-        let request = URLRequest(
-            credentials: credentials,
-            path: "reader/api/0/token"
-        )
+        let request = URLRequest(credentials: credentials, path: .token)
         
         // Send request
         let (data, response) = try await URLSession.shared.data(for: request)

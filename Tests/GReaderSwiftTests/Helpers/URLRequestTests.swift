@@ -12,7 +12,7 @@ final class URLRequestTests: XCTestCase {
             username: "username",
             authKey: "abc"
         )
-        let path = "some/path"
+        let path = URLPath.clientLogin
         
         // When
         let result = URLRequest(
@@ -22,7 +22,7 @@ final class URLRequestTests: XCTestCase {
         )
         
         // Then
-        expect(result.url) == URL(string: "https://localhost/api/some/path?123=456")!
+        expect(result.url) == URL(string: "https://localhost/api/\(URLPath.clientLogin.rawValue)?123=456")!
         expect(result).to(beAuthorized(withAuthKey: "abc"))
     }
     

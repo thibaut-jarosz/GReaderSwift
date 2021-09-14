@@ -25,7 +25,7 @@ extension Credentials {
         ]
         
         // Create request
-        var request = URLRequest(url: baseURL.appendingPathComponent("accounts/ClientLogin"))
+        var request = URLRequest(url: baseURL.appending(path: .clientLogin))
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = urlComponents.query?.data(using: .utf8)
