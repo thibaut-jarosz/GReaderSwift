@@ -15,8 +15,8 @@ extension AccessToken {
     public init(credentials: Credentials) async throws {
         // Create request
         let request = URLRequest(
-            url: credentials.baseURL.appendingPathComponent("reader/api/0/token"),
-            credentials: credentials
+            credentials: credentials,
+            path: "reader/api/0/token"
         )
         
         // Send request
