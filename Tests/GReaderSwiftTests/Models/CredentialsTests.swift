@@ -84,7 +84,7 @@ final class CredentialsTests: XCTestCase {
     
     func test_Init_ShouldThrowAnInvalidDataResponseError_WhenAuthIsMissing() async throws {
         // Given
-        let mockedResponse = "Authentication=abc".data(using: .utf8)!
+        let mockedResponse = "Authorization=abc".data(using: .utf8)!
         
         // When
         let mock = mock(response: mockedResponse)
