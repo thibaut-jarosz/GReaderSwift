@@ -61,7 +61,7 @@ final class AccessTokenTests: XCTestCase {
         mock.onRequest = { request, _ in
             // Then
             expect(request.url) == URL(string: "https://localhost/api/reader/api/0/token")!
-            expect(request.allHTTPHeaderFields?["Authorization"]) == "GoogleLogin auth=auth_key"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
         }
         mock.register()
         

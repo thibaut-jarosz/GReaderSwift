@@ -6,12 +6,12 @@ public struct Credentials: Codable, Equatable {
     public var baseURL: URL
     /// Username (or email) of the user.
     public var username: String
-    /// Authentication key associated to the username on the server.
+    /// Authorization key associated to the username on the server.
     public var authKey: String
 }
 
 extension Credentials {
-    /// Create credentials after retrieving the authentication key using given base URL, username and password.
+    /// Create credentials after retrieving the authorization key using given base URL, username and password.
     /// - Parameters:
     ///   - baseURL: The base URL of the server.
     ///   - username: The username (or email) used to authenticate on the server.
