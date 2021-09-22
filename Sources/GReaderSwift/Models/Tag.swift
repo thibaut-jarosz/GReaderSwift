@@ -23,6 +23,9 @@ public extension Tag {
         let tags: [Tag]
     }
     
+    /// Retrieve a list of all Tags on the server described in given credentials
+    /// - Parameter credentials: Credentials used to connect to the server
+    /// - Returns: A list of all Tags.
     public static func list(using credentials: Credentials) async throws -> [Tag] {
         // Create request
         let request = URLRequest(
