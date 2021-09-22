@@ -23,7 +23,7 @@ public extension Tag {
         let tags: [Tag]
     }
     
-    static func list(using credentials: Credentials) async throws -> [Tag] {
+    public static func list(using credentials: Credentials) async throws -> [Tag] {
         // Create request
         let request = URLRequest(
             credentials: credentials,
