@@ -1,13 +1,13 @@
 import Foundation
 
 public struct Tag: Codable, Equatable {
-    let id: String
-    let type: String?
+    public let id: String
+    public let type: String?
 }
 
-extension Tag {
+public extension Tag {
     /// Name of the tag if it is a folder inside a `label` subfolder
-    var name: String? {
+    public var name: String? {
         guard
             type == "folder",
             let range = id.range(of: "/label/")
