@@ -1,7 +1,9 @@
 import Foundation
 
 /// Contains all that is necessary to connect to GReader server.
-public final class Credentials: Codable {
+public final class Credentials {
+    
+    // MARK: Public vars
     
     /// Base URL of the server.
     public let baseURL: URL
@@ -10,7 +12,11 @@ public final class Credentials: Codable {
     /// Authorization key associated to the username on the server.
     public let authKey: String
     
-    // MARK: -
+    // MARK: Private vars
+    
+    internal var privateToken: String?
+    
+    // MARK: - Initializer
     
     /// Create credentials using given base URL, username and authKey,
     /// - Parameters:
@@ -21,5 +27,14 @@ public final class Credentials: Codable {
         self.baseURL = baseURL
         self.username = username
         self.authKey = authKey
+    }
+}
+
+// MARK: - Codable
+extension Credentials: Codable {
+    enum CodingKeys: String, CodingKey {
+        case baseURL
+        case username
+        case authKey
     }
 }
