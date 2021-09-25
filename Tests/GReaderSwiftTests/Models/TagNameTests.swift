@@ -48,4 +48,64 @@ final class TagNameTests: XCTestCase {
         expect(result).to(beNil())
     }
     
+    // MARK: - SetName
+    
+    func test_SetName_ShouldUdpateTagID_WhenTagTypeIsFolder() throws {
+        // Given
+        var tag = Tag(id: "user/-/label/Some Folder", type: "folder")
+        let newName = "Another Folder"
+        
+        // When
+        try tag.setName(newName)
+        
+        // Then
+        expect(tag.name) == newName
+        expect(tag) == Tag(id: "user/-/label/Another Folder", type: "folder")
+    }
+    
+    func test_SetName_ShouldThrowCannotRenameTag_WhenLabelCannotBeFoundInIDAndTypeIsFolder() {
+        // Given
+        var tag = Tag(id: "user/-/state/com.google/starred", type: "folder")
+
+        // When
+        do {
+            try tag.setName("abc")
+            XCTFail("Error should have been thrown")
+        }
+        catch {
+            // Then
+            expect(error as? GReaderError) == .cannotRenameTag
+        }
+    }
+    
+    func test_SetName_ShouldThrowCannotRenameTag_WhenTypeIsNotFolder() {
+        // Given
+        var tag = Tag(id: "user/-/label/Some Folder", type: "notfolder")
+        
+        // When
+        do {
+            try tag.setName("abc")
+            XCTFail("Error should have been thrown")
+        }
+        catch {
+            // Then
+            expect(error as? GReaderError) == .cannotRenameTag
+        }
+    }
+    
+    func test_SetName_ShouldThrowCannotRenameTag_WhenTypeIsNil() {
+        // Given
+        var tag = Tag(id: "user/-/label/Some Folder", type: nil)
+        
+        // When
+        do {
+            try tag.setName("abc")
+            XCTFail("Error should have been thrown")
+        }
+        catch {
+            // Then
+            expect(error as? GReaderError) == .cannotRenameTag
+        }
+    }
+    
 }
