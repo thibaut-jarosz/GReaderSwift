@@ -1,9 +1,9 @@
-import XCTest
 @testable import GReaderSwift
 import Mocker
 import Nimble
+import XCTest
 
-final class CredentialsTests: XCTestCase {
+final class CredentialsInitTests: XCTestCase {
     let baseURL = URL(string: "https://localhost/api/")!
     
     /// Helper function to create a mock
