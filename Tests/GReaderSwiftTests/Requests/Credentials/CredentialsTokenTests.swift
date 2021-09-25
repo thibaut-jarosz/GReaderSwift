@@ -32,6 +32,21 @@ final class CredentialsTokenTests: XCTestCase {
         expect(result) == "some_token"
     }
     
+    func test_Token_ShouldReturnPrivateToken_WhenItsValueIsNotNil() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        credentials.privateToken = "some_private_token"
+        let mockedResponse = "some_token"
+        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        mock.register()
+        
+        // When
+        let result = try await credentials.token()
+        
+        // Then
+        expect(result) == "some_private_token"
+    }
+    
     func test_Token_ShouldUseFirstNonEmptyStringAsToken_WhenServerRespondsWithMultipleStringsOnMultipleLines() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
