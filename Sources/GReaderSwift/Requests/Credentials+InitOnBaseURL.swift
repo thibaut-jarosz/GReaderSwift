@@ -6,7 +6,7 @@ public extension Credentials {
     ///   - baseURL: The base URL of the server.
     ///   - username: The username (or email) used to authenticate on the server.
     ///   - password: The password (or API password) of the username.
-    init(on baseURL: URL, username: String, password: String) async throws {
+    convenience init(on baseURL: URL, username: String, password: String) async throws {
         // Prepare form-urlencoded POST data
         var urlComponents = URLComponents()
         urlComponents.queryItems = [
