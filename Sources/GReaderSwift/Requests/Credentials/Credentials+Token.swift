@@ -4,7 +4,7 @@ internal extension Credentials {
     /// Retrieve the token, used for advanced requests, from cache or by performing a request on server
     /// - Returns: The token
     func token() async throws -> String {
-        // Return token is already retrieved
+        // Return token if already retrieved
         if let token = privateToken {
             return token
         }
