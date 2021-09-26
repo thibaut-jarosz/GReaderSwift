@@ -1,9 +1,9 @@
-import XCTest
 @testable import GReaderSwift
 import Mocker
 import Nimble
+import XCTest
 
-final class AccessTokenTests: XCTestCase {
+final class CredentialsTokenTests: XCTestCase {
     let baseURL = URL(string: "https://localhost/api/")!
     
     /// Helper function to create a mock
@@ -18,7 +18,7 @@ final class AccessTokenTests: XCTestCase {
         ])
     }
     
-    func test_Init_ShouldCreateValidToken_WhenServerRespondsWithValidData() async throws {
+    func test_Token_ShouldReturnToken_WhenServerRespondsWithValidData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = "some_token"
@@ -26,13 +26,44 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         // When
-        let result = try await AccessToken(credentials: credentials)
+        let result = try await credentials.token()
         
         // Then
-        expect(result.rawValue) == "some_token"
+        expect(result) == "some_token"
     }
     
-    func test_Init_ShouldUseFirstNonEmptyStringAsToken_WhenServerRespondsWithMultipleStringsOnMultipleLines() async throws {
+    func test_Token_ShouldSaveTokenIntoPrivateToken_WhenPrivateTokenIsNil() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        let mockedResponse = "some_token"
+        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        mock.register()
+        
+        expect(credentials.privateToken).to(beNil())
+        
+        // When
+        _ = try await credentials.token()
+        
+        // Then
+        expect(credentials.privateToken) == "some_token"
+    }
+    
+    func test_Token_ShouldReturnPrivateToken_WhenItsValueIsNotNil() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        credentials.privateToken = "some_private_token"
+        let mockedResponse = "some_token"
+        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        mock.register()
+        
+        // When
+        let result = try await credentials.token()
+        
+        // Then
+        expect(result) == "some_private_token"
+    }
+    
+    func test_Token_ShouldUseFirstNonEmptyStringAsToken_WhenServerRespondsWithMultipleStringsOnMultipleLines() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = """
@@ -46,13 +77,13 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         // When
-        let result = try await AccessToken(credentials: credentials)
+        let result = try await credentials.token()
         
         // Then
-        expect(result.rawValue) == "some token"
+        expect(result) == "some token"
     }
     
-    func test_Init_ShouldSendValidAuthorizationHeaderInRequest() async throws {
+    func test_Token_ShouldSendValidAuthorizationHeaderInRequest() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = "some_token"
@@ -66,10 +97,10 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         // When
-        let _ = try await AccessToken(credentials: credentials)
+        let _ = try await credentials.token()
     }
     
-    func test_Init_ShouldThrowAServerResponseError_WhenThereIsAServerError() async throws {
+    func test_Token_ShouldThrowAServerResponseError_WhenThereIsAServerError() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = "some_token"
@@ -79,7 +110,7 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await AccessToken(credentials: credentials)
+            let _ = try await credentials.token()
             XCTFail("Error should have been thrown")
         }
         catch {
@@ -88,7 +119,7 @@ final class AccessTokenTests: XCTestCase {
         }
     }
     
-    func test_Init_ShouldThrowAnInvalidDataResponseError_WhenResponseOnlyContainsEmptyStrings() async throws {
+    func test_Token_ShouldThrowAnInvalidDataResponseError_WhenResponseOnlyContainsEmptyStrings() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = """
@@ -101,7 +132,7 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await AccessToken(credentials: credentials)
+            let _ = try await credentials.token()
             XCTFail("Error should have been thrown")
         }
         catch {
@@ -110,7 +141,7 @@ final class AccessTokenTests: XCTestCase {
         }
     }
     
-    func test_Init_ShouldThrowAnInvalidDataResponseError_WhenResponseIsEmpty() async throws {
+    func test_Token_ShouldThrowAnInvalidDataResponseError_WhenResponseIsEmpty() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = "".data(using: .utf8)!
@@ -120,7 +151,7 @@ final class AccessTokenTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await AccessToken(credentials: credentials)
+            let _ = try await credentials.token()
             XCTFail("Error should have been thrown")
         }
         catch {

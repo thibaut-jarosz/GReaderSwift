@@ -1,11 +1,16 @@
 import Foundation
 
-public extension AccessToken {
-    /// Create an access token after retrieving its value using given credentials.
-    /// - Parameter credentials: Credentials used to retrieve the value of the access token.
-    init(credentials: Credentials) async throws {
+internal extension Credentials {
+    /// Retrieve the token, used for advanced requests, from cache or by performing a request on server
+    /// - Returns: The token
+    func token() async throws -> String {
+        // Return token if already retrieved
+        if let token = privateToken {
+            return token
+        }
+        
         // Create request
-        let request = URLRequest(credentials: credentials, path: .token)
+        let request = URLRequest(credentials: self, path: .token)
         
         // Send request
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -22,6 +27,9 @@ public extension AccessToken {
         guard let token = token, !token.isEmpty else {
             throw GReaderError.invalidDataResponse(data)
         }
-        self.rawValue = token
+        
+        // Store and return token
+        self.privateToken = token
+        return token
     }
 }
