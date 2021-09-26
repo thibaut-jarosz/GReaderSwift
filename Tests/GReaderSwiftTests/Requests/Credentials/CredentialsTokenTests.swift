@@ -32,6 +32,22 @@ final class CredentialsTokenTests: XCTestCase {
         expect(result) == "some_token"
     }
     
+    func test_Token_ShouldSaveTokenIntoPrivateToken_WhenPrivateTokenIsNil() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        let mockedResponse = "some_token"
+        let mock = mock(response: mockedResponse.data(using: .utf8)!)
+        mock.register()
+        
+        expect(credentials.privateToken).to(beNil())
+        
+        // When
+        _ = try await credentials.token()
+        
+        // Then
+        expect(credentials.privateToken) == "some_token"
+    }
+    
     func test_Token_ShouldReturnPrivateToken_WhenItsValueIsNotNil() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
