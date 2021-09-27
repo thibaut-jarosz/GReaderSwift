@@ -11,12 +11,12 @@ class BeAuthorizedTests: XCTestCase {
         // Then
         // Valid <abc> value
         expect(request).to(beAuthorized(withAuthKey: "abc"))
-        failsWithErrorMessage("expected to not equal <GoogleLogin auth=abc>, got <GoogleLogin auth=abc>") {
+        failsWithErrorMessage("expected to not have <Authorization> HTTP header value equal to <GoogleLogin auth=abc>, got <GoogleLogin auth=abc>") {
             expect(request).toNot(beAuthorized(withAuthKey: "abc"))
         }
         
         // Invalid <def> value
-        failsWithErrorMessage("expected to equal <GoogleLogin auth=def>, got <GoogleLogin auth=abc>") {
+        failsWithErrorMessage("expected to have <Authorization> HTTP header value equal to <GoogleLogin auth=def>, got <GoogleLogin auth=abc>") {
             expect(request).to(beAuthorized(withAuthKey: "def"))
         }
         expect(request).toNot(beAuthorized(withAuthKey: "def"))
@@ -29,7 +29,7 @@ class BeAuthorizedTests: XCTestCase {
         
         // Then
         // Valid <abc> value
-        failsWithErrorMessage("expected to equal <GoogleLogin auth=abc>, got <auth=abc>") {
+        failsWithErrorMessage("expected to have <Authorization> HTTP header value equal to <GoogleLogin auth=abc>, got <auth=abc>") {
             expect(request).to(beAuthorized(withAuthKey: "abc"))
         }
         expect(request).toNot(beAuthorized(withAuthKey: "abc"))
@@ -53,7 +53,7 @@ class BeAuthorizedTests: XCTestCase {
         let request = URLRequest(url: URL(string: "https://localhost/")!)
         
         // Then
-        failsWithErrorMessage("expected to have <Authorization> HTTP header field, got <nil>") {
+        failsWithErrorMessage("expected to have <Authorization> HTTP header, got <[]>") {
             expect(request).to(beAuthorized(withAuthKey: "abc"))
         }
         expect(request).toNot(beAuthorized(withAuthKey: "abc"))
@@ -67,7 +67,7 @@ class BeAuthorizedTests: XCTestCase {
         request.setValue("c", forHTTPHeaderField: "z")
         
         // Then
-        failsWithErrorMessage("expected to have <Authorization> HTTP header field, got <[x, y, z]>") {
+        failsWithErrorMessage("expected to have <Authorization> HTTP header, got <[x, y, z]>") {
             expect(request).to(beAuthorized(withAuthKey: "abc"))
         }
         expect(request).toNot(beAuthorized(withAuthKey: "abc"))
