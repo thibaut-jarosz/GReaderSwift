@@ -45,7 +45,8 @@ final class CredentialsInitTests: XCTestCase {
         mock.onRequest = { request, _ in
             // Then
             expect(request.url) == URL(string: "https://localhost/api/accounts/ClientLogin")!
-            expect(request.httpBodyStreamString?.urlQueryItems).to(contain([
+            expect(request.httpMethod) == "POST"
+            expect(request).to(haveURLEncodedForm([
                 URLQueryItem(name: "Email", value: "username"),
                 URLQueryItem(name: "Passwd", value: "password"),
             ]))
