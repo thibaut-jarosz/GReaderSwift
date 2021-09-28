@@ -14,4 +14,14 @@ extension URLRequest {
         setValue("GoogleLogin auth=\(credentials.authKey)", forHTTPHeaderField: "Authorization")
     }
     
+    /// Configure the request for URL encoded POST form, using URLQueryItems as body.
+    /// - Parameter items: The URL Query items used to create the body of the request.
+    mutating func setURLEncodedPostForm(_ items: [URLQueryItem]) {
+        var components = URLComponents()
+        components.queryItems = items
+        
+        self.httpBody = components.query?.data(using: .utf8)
+        self.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        self.httpMethod = "POST"
+    }
 }

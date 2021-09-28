@@ -7,18 +7,12 @@ public extension Credentials {
     ///   - username: The username (or email) used to authenticate on the server.
     ///   - password: The password (or API password) of the username.
     convenience init(on baseURL: URL, username: String, password: String) async throws {
-        // Prepare form-urlencoded POST data
-        var urlComponents = URLComponents()
-        urlComponents.queryItems = [
-            .init(name: "Email", value: username),
-            .init(name: "Passwd", value: password),
-        ]
-        
         // Create request
         var request = URLRequest(url: baseURL.appending(path: .clientLogin))
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        request.httpBody = urlComponents.query?.data(using: .utf8)
+        request.setURLEncodedPostForm([
+            .init(name: "Email", value: username),
+            .init(name: "Passwd", value: password),
+        ])
         
         // Send request
         let (data, response) = try await URLSession.shared.data(for: request)
