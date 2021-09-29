@@ -1,11 +1,19 @@
 import Foundation
 
+
+/// Protocol used to remove deprecated warning from using `Credentials.cachedToken`
+fileprivate protocol CredentialsCachedToken: AnyObject {
+    var cachedToken: String? { get set }
+}
+extension Credentials: CredentialsCachedToken {}
+
+
 internal extension Credentials {
     /// Retrieve the token, used for advanced requests, from cache or by performing a request on server
     /// - Returns: The token
     func token() async throws -> String {
         // Return token if already retrieved
-        if let token = privateToken {
+        if let token = (self as CredentialsCachedToken).cachedToken {
             return token
         }
         
@@ -29,7 +37,7 @@ internal extension Credentials {
         }
         
         // Store and return token
-        self.privateToken = token
+        (self as CredentialsCachedToken).cachedToken = token
         return token
     }
 }

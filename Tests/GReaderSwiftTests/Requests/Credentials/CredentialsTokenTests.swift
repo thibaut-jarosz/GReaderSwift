@@ -32,26 +32,26 @@ final class CredentialsTokenTests: XCTestCase {
         expect(result) == "some_token"
     }
     
-    func test_Token_ShouldSaveTokenIntoPrivateToken_WhenPrivateTokenIsNil() async throws {
+    func test_Token_ShouldSaveTokenIntoCachedToken_WhenChachedTokenIsNil() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = "some_token"
         let mock = mock(response: mockedResponse.data(using: .utf8)!)
         mock.register()
         
-        expect(credentials.privateToken).to(beNil())
+        expect(credentials.cachedTokenTestAccess).to(beNil())
         
         // When
         _ = try await credentials.token()
         
         // Then
-        expect(credentials.privateToken) == "some_token"
+        expect(credentials.cachedTokenTestAccess) == "some_token"
     }
     
-    func test_Token_ShouldReturnPrivateToken_WhenItsValueIsNotNil() async throws {
+    func test_Token_ShouldReturnCachedToken_WhenItsValueIsNotNil() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        credentials.privateToken = "some_private_token"
+        credentials.cachedTokenTestAccess = "some_cached_token"
         let mockedResponse = "some_token"
         let mock = mock(response: mockedResponse.data(using: .utf8)!)
         mock.register()
@@ -60,7 +60,7 @@ final class CredentialsTokenTests: XCTestCase {
         let result = try await credentials.token()
         
         // Then
-        expect(result) == "some_private_token"
+        expect(result) == "some_cached_token"
     }
     
     func test_Token_ShouldUseFirstNonEmptyStringAsToken_WhenServerRespondsWithMultipleStringsOnMultipleLines() async throws {

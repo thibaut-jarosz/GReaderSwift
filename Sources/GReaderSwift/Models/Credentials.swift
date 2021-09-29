@@ -14,7 +14,8 @@ public final class Credentials {
     
     // MARK: Private vars
     
-    internal var privateToken: String?
+    @available(*, deprecated, message: "Do not use directly, use `token(from:)` instead.")
+    internal var cachedToken: String?
     
     // MARK: - Initializer
     
