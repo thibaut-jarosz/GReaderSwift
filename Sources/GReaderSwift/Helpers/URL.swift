@@ -10,15 +10,15 @@ extension URL {
     func appending(path: URLPath? = nil, queryItems: [URLQueryItem]? = nil) -> URL {
         var url = self
         
-        if let path = path {
-            url.appendPathComponent(path.rawValue)
+        if let aPath = path {
+            url.appendPathComponent(aPath.rawValue)
         }
         
-        if let queryItems = queryItems, queryItems.count > 0 {
+        if let items = queryItems, items.count > 0 {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true) ?? URLComponents()
-            var items = components.queryItems ?? []
-            items.append(contentsOf: queryItems)
-            components.queryItems = items
+            var originalItems = components.queryItems ?? []
+            originalItems.append(contentsOf: items)
+            components.queryItems = originalItems
             if let componentsURL = components.url {
                 url = componentsURL
             }

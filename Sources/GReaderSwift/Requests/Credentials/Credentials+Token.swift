@@ -32,12 +32,12 @@ internal extension Credentials {
         let token = String(data: data, encoding: .utf8)?
             .components(separatedBy: .newlines)
             .first { !$0.isEmpty }
-        guard let token = token, !token.isEmpty else {
+        guard let result = token, !result.isEmpty else {
             throw GReaderError.invalidDataResponse(data)
         }
         
         // Store and return token
-        (self as CredentialsCachedToken).cachedToken = token
-        return token
+        (self as CredentialsCachedToken).cachedToken = result
+        return result
     }
 }
