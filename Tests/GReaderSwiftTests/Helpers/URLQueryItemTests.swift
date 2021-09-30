@@ -49,4 +49,26 @@ final class URLQueryItemTests: XCTestCase {
         expect(result) == URLQueryItem(name: "T", value: "some_token")
     }
     
+    func test_TokenFromCredentials_ShouldThrowError_WhenCachedTokenIsNilAndServerRespondWithError() async throws {
+        // Given
+        let baseURL = URL(string: "https://localhost/api/")!
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        Mock(
+            url: URL(string: URLPath.token.rawValue, relativeTo: baseURL)!,
+            dataType: .json,
+            statusCode: 500,
+            data: [.get : "some_token".data(using: .utf8)!]
+        ).register()
+        
+        // When
+        do {
+            _ = try await URLQueryItem.token(from: credentials)
+            XCTFail("Error should have been thrown")
+        }
+        catch {
+            // Then
+            expect(error as? GReaderError) == .serverResponseError(500)
+        }
+    }
+    
 }
