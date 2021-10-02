@@ -1,9 +1,8 @@
 @testable import GReaderSwift
-import Mocker
 import Nimble
 import XCTest
 
-final class URLRequestTests: XCTestCase {
+final class URLRequestConfigureTests: XCTestCase {
     
     // MARK: - Init
     

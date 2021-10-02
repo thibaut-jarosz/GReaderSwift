@@ -17,20 +17,8 @@ public extension Tag {
         )
         
         // Send request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        // Check response status code
-        if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 300 {
-            throw GReaderError.serverResponseError(statusCode)
-        }
-        
-        // Parse response by getting first non-empty line
-        do {
-            return try JSONDecoder().decode(TagContainer.self, from: data).tags
-        }
-        catch {
-            // Throw invalidDataResponse if JSON cannot be decoded
-            throw GReaderError.invalidDataResponse(data)
-        }
+        return try await request
+            .send(withJSONResponse: TagContainer.self)
+            .tags
     }
 }
