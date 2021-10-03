@@ -9,7 +9,7 @@ public extension Tag {
         await request.setURLEncodedPostForm([
             .jsonOutput,
             try .token(from: credentials),
-            .init(name: "s", value: self.id),
+            .init(name: "s", value: self.id.rawValue),
         ])
         
         // Send request
