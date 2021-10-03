@@ -15,12 +15,7 @@ public extension Credentials {
         ])
         
         // Send request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        // Check response status code
-        if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 300 {
-            throw GReaderError.serverResponseError(statusCode)
-        }
+        let data = try await request.send()
         
         // Parse response: auth key is stored in the line that starts with "Auth="
         let auth = String(data: data, encoding: .utf8)?.parsedLoginResponse["Auth"] ?? ""

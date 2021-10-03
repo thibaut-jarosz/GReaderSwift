@@ -21,12 +21,7 @@ internal extension Credentials {
         let request = URLRequest(credentials: self, path: .token)
         
         // Send request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        // Check response status code
-        if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 300 {
-            throw GReaderError.serverResponseError(statusCode)
-        }
+        let data = try await request.send()
         
         // Parse response by getting first non-empty line
         let token = String(data: data, encoding: .utf8)?
