@@ -15,8 +15,8 @@ public extension Tag {
         await request.setURLEncodedPostForm([
             .jsonOutput,
             try .token(from: credentials),
-            .init(name: "s", value: self.id),
-            .init(name: "dest", value: newTag.id)
+            .init(name: "s", value: self.id.rawValue),
+            .init(name: "dest", value: newTag.id.rawValue)
         ])
         
         // Send request

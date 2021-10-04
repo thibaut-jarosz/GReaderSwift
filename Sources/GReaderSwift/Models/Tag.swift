@@ -1,7 +1,12 @@
 import Foundation
 
 public struct Tag: Codable, Equatable {
-    public var id: String
+    public struct ID: StringRepresentable {
+        public var rawValue: String
+        public init(rawValue: String) { self.rawValue = rawValue }
+    }
+    
+    public var id: ID
     public var type: String?
 }
 
@@ -11,7 +16,7 @@ public extension Tag {
         guard let index = nameStartIndex else {
             return nil
         }
-        return String(id.suffix(from: index))
+        return String(id.rawValue.suffix(from: index))
     }
     
     /// Rename the tag if it is a folder inside a `label` subfolder
@@ -20,14 +25,14 @@ public extension Tag {
         guard let index = nameStartIndex else {
             throw GReaderError.cannotRenameTag
         }
-        self.id = id.prefix(upTo: index).appending(newName)
+        self.id = .init(id.rawValue.prefix(upTo: index).appending(newName))
     }
     
     /// Starting index of the name
     private var nameStartIndex: String.Index? {
         guard
             type == "folder",
-            let range = id.range(of: "/label/")
+            let range = id.rawValue.range(of: "/label/")
         else {
             return nil
         }
