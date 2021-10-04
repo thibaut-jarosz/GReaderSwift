@@ -3,14 +3,30 @@ import Mocker
 import Nimble
 import XCTest
 
-final class TagListTests: XCTestCase {
+final class SubscriptionListTests: XCTestCase {
     
     let baseURL = URL(string: "https://localhost/api/")!
     let mockedResponse = """
         {
-            "tags": [
-                { "id": "abc/def" },
-                { "id": "123/456", "type": "folder" }
+            "subscriptions": [
+                {
+                    "id": "feed/1",
+                    "title": "Feed 1",
+                    "categories": [
+                        {
+                            "id": "user/-/label/Folder 1",
+                            "label": "Folder 1"
+                        }
+                    ],
+                    "url": "https://site1/feed.xml",
+                    "htmlUrl": "https://site1/",
+                    "iconUrl": "https://site1/icon.jpg"
+                },
+                {
+                    "id": "feed/4",
+                    "title": "Feed 4",
+                    "categories": [],
+                },
             ]
         }
         """
@@ -21,28 +37,44 @@ final class TagListTests: XCTestCase {
     ///   - response: response data
     /// - Returns: The created mock
     private func mock(statusCode: Int = 200, response: Data) -> Mock {
-        let url = URL(string: "reader/api/0/tag/list?output=json", relativeTo: baseURL)!
+        let url = URL(string: "reader/api/0/subscription/list?output=json", relativeTo: baseURL)!
         return Mock(url: url, dataType: .json, statusCode: statusCode, data: [
             .get : response,
         ])
     }
     
-    func test_List_ShouldReturnTagList_WhenServerRespondsWithValidData() async throws {
+    func test_List_ShouldReturnSubscriptionList_WhenServerRespondsWithValidData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mock = mock(response: mockedResponse.data(using: .utf8)!)
         mock.register()
         
         // When
-        let result = try await Tag.list(using: credentials)
+        let result = try await Subscription.list(using: credentials)
         
         // Then
         expect(result) == [
-            Tag(id: "abc/def", type: nil),
-            Tag(id: "123/456", type: "folder")
+            Subscription(
+                id: "feed/1",
+                title: "Feed 1",
+                categories: [
+                    .init(id: "user/-/label/Folder 1", label: "Folder 1")
+                ],
+                url: URL(string: "https://site1/feed.xml")!,
+                htmlURL: URL(string: "https://site1/")!,
+                iconURL: URL(string: "https://site1/icon.jpg")!
+            ),
+            Subscription(
+                id: "feed/4",
+                title: "Feed 4",
+                categories: [],
+                url: nil,
+                htmlURL: nil,
+                iconURL: nil
+            )
         ]
     }
-    
+        
     func test_List_ShouldSendValidAuthorizationHeaderInRequest() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
@@ -50,13 +82,13 @@ final class TagListTests: XCTestCase {
         
         mock.onRequest = { request, _ in
             // Then
-            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/tag/list?output=json")!
+            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/subscription/list?output=json")!
             expect(request).to(beAuthorized(withAuthKey: "auth_key"))
         }
         mock.register()
         
         // When
-        let _ = try await Tag.list(using: credentials)
+        let _ = try await Subscription.list(using: credentials)
     }
     
     func test_List_ShouldThrowAServerResponseError_WhenThereIsAServerError() async throws {
@@ -68,7 +100,7 @@ final class TagListTests: XCTestCase {
         mock.register()
 
         do {
-            let _ = try await Tag.list(using: credentials)
+            let _ = try await Subscription.list(using: credentials)
             XCTFail("Error should have been thrown")
         }
         catch {
@@ -87,7 +119,7 @@ final class TagListTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await Tag.list(using: credentials)
+            let _ = try await Subscription.list(using: credentials)
             XCTFail("Error should have been thrown")
         }
         catch {
@@ -101,11 +133,20 @@ final class TagListTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = """
         {
-            "tags": [
-                { "id": "abc/def" },
-                { "id": "123/456", "type": "folder" }
-            ]
-        
+            "subscriptions": [
+                {
+                    "id": "feed/1",
+                    "title": "Feed 1",
+                    "categories": [
+                        {
+                            "id": "user/-/label/Folder 1",
+                            "label": "Folder 1"
+                        }
+                    ],
+                    "url": "https://site1/feed.xml",
+                    "htmlUrl": "https://site1/",
+                    "iconUrl": "ttps://site1/icon.jpg"
+                }
         """.data(using: .utf8)!
         
         // When
@@ -113,7 +154,7 @@ final class TagListTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await Tag.list(using: credentials)
+            let _ = try await Subscription.list(using: credentials)
             XCTFail("Error should have been thrown")
         }
         catch {
@@ -127,11 +168,13 @@ final class TagListTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let mockedResponse = """
         {
-            "tags": [
-                { "ids": "abc/def" },
-                { "id": "123/456", "type": "folder" }
+            "subscriptions": [
+                {
+                    "id": "feed/1",
+                    "title": "Feed 1",
+                }
             ]
-        
+        }
         """.data(using: .utf8)!
         
         // When
@@ -139,7 +182,7 @@ final class TagListTests: XCTestCase {
         mock.register()
         
         do {
-            let _ = try await Tag.list(using: credentials)
+            let _ = try await Subscription.list(using: credentials)
             XCTFail("Error should have been thrown")
         }
         catch {
