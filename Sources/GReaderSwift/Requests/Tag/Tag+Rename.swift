@@ -5,8 +5,8 @@ public extension Tag {
     /// - Parameters:
     ///   - newName: New name of the tag
     ///   - credentials: Credentials used to connect to the server
-    /// - Returns: The tag with the new name
-    @discardableResult func rename(to newName: String, using credentials: Credentials) async throws -> Tag {
+    /// - Returns: New tag ID
+    @discardableResult func rename(to newName: String, using credentials: Credentials) async throws -> Tag.ID {
         var newTag = self
         try newTag.setName(newName)
         
@@ -23,6 +23,6 @@ public extension Tag {
         try await request.send()
         
         // Return new tag
-        return newTag
+        return newTag.id
     }
 }
