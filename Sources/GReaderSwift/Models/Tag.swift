@@ -11,7 +11,7 @@ public struct Tag: Codable, Equatable {
 }
 
 public extension Tag {
-    /// Name of the tag if it is a folder inside a `label` subfolder
+    /// Name of the tag if it contains a `label` subpath
     var name: String? {
         guard let index = nameStartIndex else {
             return nil
@@ -19,7 +19,7 @@ public extension Tag {
         return String(id.rawValue.suffix(from: index))
     }
     
-    /// Rename the tag if it is a folder inside a `label` subfolder
+    /// Rename the tag if it contains a `label` subpath
     /// - Parameter newName: The new name
     internal mutating func setName(_ newName: String) throws {
         guard let index = nameStartIndex else {
@@ -30,10 +30,7 @@ public extension Tag {
     
     /// Starting index of the name
     private var nameStartIndex: String.Index? {
-        guard
-            type == "folder",
-            let range = id.rawValue.range(of: "/label/")
-        else {
+        guard let range = id.rawValue.range(of: "/label/") else {
             return nil
         }
         return range.upperBound

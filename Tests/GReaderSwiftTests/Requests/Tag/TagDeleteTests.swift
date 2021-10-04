@@ -36,7 +36,7 @@ final class TagDeleteTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         
         // Then
         expect {
@@ -48,7 +48,7 @@ final class TagDeleteTests: XCTestCase {
     func test_Delete_ShouldSendValidHeadersAndPostData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         tokenMock(response: "some_token".data(using: .utf8)!).register()
         var mock = mock(response: "OK".data(using: .utf8)!)
         
@@ -73,7 +73,7 @@ final class TagDeleteTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(statusCode: 500, response: Data()).register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         
         // When
         do {
@@ -91,7 +91,7 @@ final class TagDeleteTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(statusCode: 500, response: Data()).register()
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         
         // When
         do {
@@ -110,7 +110,7 @@ final class TagDeleteTests: XCTestCase {
         credentials.cachedTokenTestAccess = "some_token"
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(statusCode: 500, response: Data()).register()
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         
         // When/Then
         try await tag.delete(using: credentials)

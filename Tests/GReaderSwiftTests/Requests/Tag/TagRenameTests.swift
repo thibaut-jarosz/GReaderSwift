@@ -36,19 +36,19 @@ final class TagRenameTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
-        let tag = Tag(id: "user/-/label/Old name", type: "folder")
+        let tag = Tag(id: "user/-/label/Old name", type: nil)
         
         // When
         let result = try await tag.rename(to: "New Name", using: credentials)
         
         // Then
-        expect(result) == Tag(id: "user/-/label/New Name", type: "folder")
+        expect(result) == Tag(id: "user/-/label/New Name", type: nil)
     }
     
     func test_Rename_ShouldSendValidHeadersAndPostData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        let tag = Tag(id: "user/-/label/Old name", type: "folder")
+        let tag = Tag(id: "user/-/label/Old name", type: nil)
         tokenMock(response: "some_token".data(using: .utf8)!).register()
         var mock = mock(response: "OK".data(using: .utf8)!)
         
@@ -72,7 +72,7 @@ final class TagRenameTests: XCTestCase {
     func test_Rename_ShouldThrowCannotRenameTagError_WhenTagDoesNotMeetTheRequirementsToBeRenamed() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        let tag = Tag(id: "abc/def", type: "folder")
+        let tag = Tag(id: "abc/def", type: nil)
         
         // When
         do {
@@ -90,7 +90,7 @@ final class TagRenameTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(statusCode: 500, response: Data()).register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
-        let tag = Tag(id: "user/-/label/Old name", type: "folder")
+        let tag = Tag(id: "user/-/label/Old name", type: nil)
         
         // When
         do {
@@ -108,7 +108,7 @@ final class TagRenameTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(statusCode: 500, response: Data()).register()
-        let tag = Tag(id: "user/-/label/Old name", type: "folder")
+        let tag = Tag(id: "user/-/label/Old name", type: nil)
         
         // When
         do {
@@ -127,12 +127,12 @@ final class TagRenameTests: XCTestCase {
         credentials.cachedTokenTestAccess = "some_token"
         mock(response: "OK".data(using: .utf8)!).register()
         tokenMock(statusCode: 500, response: Data()).register()
-        let tag = Tag(id: "user/-/label/Old name", type: "folder")
+        let tag = Tag(id: "user/-/label/Old name", type: nil)
         
         // When
         let result = try await tag.rename(to: "New Name", using: credentials)
         
         // Then
-        expect(result) == Tag(id: "user/-/label/New Name", type: "folder")
+        expect(result) == Tag(id: "user/-/label/New Name", type: nil)
     }
 }
