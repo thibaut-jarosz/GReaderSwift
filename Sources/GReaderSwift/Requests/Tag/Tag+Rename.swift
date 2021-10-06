@@ -7,8 +7,9 @@ public extension Tag {
     ///   - credentials: Credentials used to connect to the server
     /// - Returns: New tag ID
     @discardableResult func rename(to newName: String, using credentials: Credentials) async throws -> Tag.ID {
-        var newTag = self
-        try newTag.setName(newName)
+        guard let newID = id.renamed(newName) else {
+            throw GReaderError.cannotRenameTag
+        }
         
         // Create request
         var request = URLRequest(credentials: credentials, path: .tagRename)
@@ -16,13 +17,13 @@ public extension Tag {
             .jsonOutput,
             try .token(from: credentials),
             .init(name: "s", value: self.id.rawValue),
-            .init(name: "dest", value: newTag.id.rawValue)
+            .init(name: "dest", value: newID.rawValue)
         ])
         
         // Send request
         try await request.send()
         
-        // Return new tag
-        return newTag.id
+        // Return new Tag ID
+        return newID
     }
 }

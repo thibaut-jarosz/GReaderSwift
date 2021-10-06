@@ -8,31 +8,37 @@ public struct Tag: Codable, Equatable {
     
     public var id: ID
     public var type: String?
+    public var name: String? { id.name }
 }
 
-public extension Tag {
+internal extension Tag.ID {
     /// Name of the tag if it contains a `label` subpath
     var name: String? {
         guard let index = nameStartIndex else {
             return nil
         }
-        return String(id.rawValue.suffix(from: index))
+        return String(rawValue.suffix(from: index))
     }
     
-    /// Rename the tag if it contains a `label` subpath
+    /// Replace the name part of the ID and return the result.
     /// - Parameter newName: The new name
-    internal mutating func setName(_ newName: String) throws {
+    /// - Returns: The renamed ID or `nil` if there is no name part in the ID
+    func renamed(_ newName: String) -> Self?  {
         guard let index = nameStartIndex else {
-            throw GReaderError.cannotRenameTag
+            return nil
         }
-        self.id = .init(id.rawValue.prefix(upTo: index).appending(newName))
+        let newID = rawValue
+            .prefix(upTo: index)
+            .appending(newName)
+        return Self.init(newID)
     }
     
     /// Starting index of the name
     private var nameStartIndex: String.Index? {
-        guard let range = id.rawValue.range(of: "/label/") else {
+        guard let range = rawValue.range(of: "/label/") else {
             return nil
         }
         return range.upperBound
     }
+    
 }
