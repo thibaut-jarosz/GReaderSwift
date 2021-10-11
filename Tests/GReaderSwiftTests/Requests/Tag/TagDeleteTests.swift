@@ -8,14 +8,12 @@ final class TagDeleteTests: XCTestCase {
     let baseURL = URL(string: "https://localhost/api/")!
     
     /// Helper function to create a mock
-    /// - Parameters:
-    ///   - statusCode: response status code
-    ///   - response: response data
+    /// - Parameter statusCode: response status code
     /// - Returns: The created mock
-    private func mock(statusCode: Int = 200, response: Data) -> Mock {
+    private func mock(statusCode: Int = 200) -> Mock {
         let url = URL(string: "reader/api/0/disable-tag", relativeTo: baseURL)!
         return Mock(url: url, dataType: .json, statusCode: statusCode, data: [
-            .post : response,
+            .post : "ignored response".data(using: .utf8)!,
         ])
     }
     
@@ -34,7 +32,7 @@ final class TagDeleteTests: XCTestCase {
     func test_Delete_ShouldNotThrow_WhenEverythingSucceeded() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        mock(response: "OK".data(using: .utf8)!).register()
+        mock().register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
         let tag = Tag(id: "abc/def", type: nil)
         
@@ -50,7 +48,7 @@ final class TagDeleteTests: XCTestCase {
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         let tag = Tag(id: "abc/def", type: nil)
         tokenMock(response: "some_token".data(using: .utf8)!).register()
-        var mock = mock(response: "OK".data(using: .utf8)!)
+        var mock = mock()
         
         mock.onRequest = { request, _ in
             // Then
@@ -71,7 +69,7 @@ final class TagDeleteTests: XCTestCase {
     func test_Delete_ShouldThrowAServerResponseError_WhenThereIsAServerError() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        mock(statusCode: 500, response: Data()).register()
+        mock(statusCode: 500).register()
         tokenMock(response: "some_token".data(using: .utf8)!).register()
         let tag = Tag(id: "abc/def", type: nil)
         
@@ -89,7 +87,7 @@ final class TagDeleteTests: XCTestCase {
     func test_Delete_ShouldThrowAServerResponseError_WhenThereIsAServerErrorWithTokenRequest() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        mock(response: "OK".data(using: .utf8)!).register()
+        mock().register()
         tokenMock(statusCode: 500, response: Data()).register()
         let tag = Tag(id: "abc/def", type: nil)
         
@@ -108,7 +106,7 @@ final class TagDeleteTests: XCTestCase {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         credentials.cachedTokenTestAccess = "some_token"
-        mock(response: "OK".data(using: .utf8)!).register()
+        mock().register()
         tokenMock(statusCode: 500, response: Data()).register()
         let tag = Tag(id: "abc/def", type: nil)
         
