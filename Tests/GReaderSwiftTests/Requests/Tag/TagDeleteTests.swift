@@ -29,20 +29,6 @@ final class TagDeleteTests: XCTestCase {
         ])
     }
     
-    func test_Delete_ShouldNotThrow_WhenEverythingSucceeded() async throws {
-        // Given
-        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
-        mock().register()
-        tokenMock(response: "some_token".data(using: .utf8)!).register()
-        let tag = Tag(id: "abc/def", type: nil)
-        
-        // Then
-        expect {
-            // When
-            try await tag.delete(using: credentials)
-        }.notTo(throwError())
-    }
-    
     func test_Delete_ShouldSendValidHeadersAndPostData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
