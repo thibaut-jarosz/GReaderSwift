@@ -14,8 +14,8 @@ final class SubscriptionListTests: XCTestCase {
                     "title": "Feed 1",
                     "categories": [
                         {
-                            "id": "user/-/label/Folder 1",
-                            "label": "Folder 1"
+                            "id": "user/-/label/Cat 1",
+                            "label": "Cat 1"
                         }
                     ],
                     "url": "https://site1/feed.xml",
@@ -58,7 +58,7 @@ final class SubscriptionListTests: XCTestCase {
                 id: "feed/1",
                 title: "Feed 1",
                 categories: [
-                    .init(id: "user/-/label/Folder 1", label: "Folder 1")
+                    .init(id: "user/-/label/Cat 1", label: "Cat 1")
                 ],
                 url: URL(string: "https://site1/feed.xml")!,
                 htmlURL: URL(string: "https://site1/")!,
@@ -139,8 +139,8 @@ final class SubscriptionListTests: XCTestCase {
                     "title": "Feed 1",
                     "categories": [
                         {
-                            "id": "user/-/label/Folder 1",
-                            "label": "Folder 1"
+                            "id": "user/-/label/Cat 1",
+                            "label": "Cat 1"
                         }
                     ],
                     "url": "https://site1/feed.xml",
