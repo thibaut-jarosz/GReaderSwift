@@ -31,7 +31,7 @@ final class TagRenameTests: XCTestCase {
         ])
     }
     
-    func test_Rename_ShouldReturnRenamedTag_WhenEverythingSucceeded() async throws {
+    func test_Rename_ShouldReturnRenamedTagID_WhenEverythingSucceeded() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
         mock(response: "OK".data(using: .utf8)!).register()
@@ -42,7 +42,7 @@ final class TagRenameTests: XCTestCase {
         let result = try await tag.rename(to: "New Name", using: credentials)
         
         // Then
-        expect(result) == Tag(id: "user/-/label/New Name", type: nil)
+        expect(result) == Tag.ID("user/-/label/New Name")
     }
     
     func test_Rename_ShouldSendValidHeadersAndPostData() async throws {
@@ -133,6 +133,6 @@ final class TagRenameTests: XCTestCase {
         let result = try await tag.rename(to: "New Name", using: credentials)
         
         // Then
-        expect(result) == Tag(id: "user/-/label/New Name", type: nil)
+        expect(result) == Tag.ID("user/-/label/New Name")
     }
 }
