@@ -40,6 +40,7 @@ final class TagDeleteTests: XCTestCase {
             // Then
             expect(request.url) == URL(string: "https://localhost/api/reader/api/0/disable-tag")!
             expect(request.httpMethod) == "POST"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
             expect(request).to(haveURLEncodedForm([
                 .init(name: "output", value: "json"),
                 .init(name: "T", value: "some_token"),
