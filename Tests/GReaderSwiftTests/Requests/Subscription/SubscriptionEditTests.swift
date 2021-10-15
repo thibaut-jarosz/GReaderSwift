@@ -39,6 +39,8 @@ final class SubscriptionEditTests: XCTestCase {
         ])
     }
     
+    // MARK: - Edit
+    
     func test_Edit_ShouldSendValidHeadersAndPostData() async throws {
         // Given
         let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
@@ -111,5 +113,108 @@ final class SubscriptionEditTests: XCTestCase {
         
         // When/Then
         try await subscription.edit(using: credentials)
+    }
+    
+    // MARK: - Delete
+    
+    func test_Delete_ShouldSendValidHeadersAndPostData() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        tokenMock(response: "some_token".data(using: .utf8)!).register()
+        var mock = mock()
+        
+        mock.onRequest = { request, _ in
+            // Then
+            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/subscription/edit")!
+            expect(request.httpMethod) == "POST"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
+            expect(request).to(haveURLEncodedForm([
+                .init(name: "T", value: "some_token"),
+                .init(name: "s", value: "feed/1"),
+                .init(name: "ac", value: "unsubscribe"),
+            ]))
+        }
+        mock.register()
+        
+        // When
+        try await subscription.delete(using: credentials)
+    }
+    
+    // MARK: - Rename
+    
+    func test_Rename_ShouldSendValidHeadersAndPostData() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        tokenMock(response: "some_token".data(using: .utf8)!).register()
+        var mock = mock()
+        
+        mock.onRequest = { request, _ in
+            // Then
+            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/subscription/edit")!
+            expect(request.httpMethod) == "POST"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
+            expect(request).to(haveURLEncodedForm([
+                .init(name: "T", value: "some_token"),
+                .init(name: "s", value: "feed/1"),
+                .init(name: "ac", value: "edit"),
+                .init(name: "t", value: "New Name"),
+            ]))
+        }
+        mock.register()
+        
+        // When
+        try await subscription.rename(to: "New Name", using: credentials)
+    }
+    
+    // MARK: - Tag
+    
+    func test_Tag_ShouldSendValidHeadersAndPostData() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        tokenMock(response: "some_token".data(using: .utf8)!).register()
+        var mock = mock()
+        
+        mock.onRequest = { request, _ in
+            // Then
+            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/subscription/edit")!
+            expect(request.httpMethod) == "POST"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
+            expect(request).to(haveURLEncodedForm([
+                .init(name: "T", value: "some_token"),
+                .init(name: "s", value: "feed/1"),
+                .init(name: "ac", value: "edit"),
+                .init(name: "a", value: "user/-/label/Some Tag"),
+            ]))
+        }
+        mock.register()
+        
+        // When
+        try await subscription.tag(with: "user/-/label/Some Tag", using: credentials)
+    }
+    
+    // MARK: - Untag
+    
+    func test_Untag_ShouldSendValidHeadersAndPostData() async throws {
+        // Given
+        let credentials = Credentials(baseURL: baseURL, username: "username", authKey: "auth_key")
+        tokenMock(response: "some_token".data(using: .utf8)!).register()
+        var mock = mock()
+        
+        mock.onRequest = { request, _ in
+            // Then
+            expect(request.url) == URL(string: "https://localhost/api/reader/api/0/subscription/edit")!
+            expect(request.httpMethod) == "POST"
+            expect(request).to(beAuthorized(withAuthKey: "auth_key"))
+            expect(request).to(haveURLEncodedForm([
+                .init(name: "T", value: "some_token"),
+                .init(name: "s", value: "feed/1"),
+                .init(name: "ac", value: "edit"),
+                .init(name: "r", value: "user/-/label/Some Tag"),
+            ]))
+        }
+        mock.register()
+        
+        // When
+        try await subscription.untag("user/-/label/Some Tag", using: credentials)
     }
 }
