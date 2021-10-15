@@ -3,6 +3,7 @@ import Foundation
 /// A list of all relavive Paths on a server
 enum URLPath: String {
     case clientLogin = "accounts/ClientLogin"
+    case subscriptionEdit = "reader/api/0/subscription/edit"
     case subscriptionList = "reader/api/0/subscription/list"
     case tagList = "reader/api/0/tag/list"
     case tagRename = "reader/api/0/rename-tag"
